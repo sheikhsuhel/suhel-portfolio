@@ -30,5 +30,17 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    ".vinext",
+    ".wrangler",
+    "build",
+    "db",
+    "dist",
+    "drizzle",
+    "examples",
+    "private-notes",
+    "work",
+    "worker"
+  ]
 }

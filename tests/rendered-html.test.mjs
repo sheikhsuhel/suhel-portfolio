@@ -35,7 +35,10 @@ test("keeps production metadata free of local-host references", async () => {
   assert.equal(response.status, 200);
 
   const html = await response.text();
-  assert.match(html, /property="og:image" content="\/og\.png"/);
+  assert.match(html, /property="og:url" content="https:\/\/suhel-portfolio-blue\.vercel\.app"/);
+  assert.match(html, /property="og:image" content="https:\/\/suhel-portfolio-blue\.vercel\.app\/og\.png"/);
+  assert.match(html, /rel="canonical" href="https:\/\/suhel-portfolio-blue\.vercel\.app"/);
+  assert.match(html, /rel="icon" href="https:\/\/suhel-portfolio-blue\.vercel\.app\/favicon\.svg"/);
   assert.doesNotMatch(html, /localhost|127\.0\.0\.1/);
 });
 

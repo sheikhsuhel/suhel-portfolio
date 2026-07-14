@@ -1,4 +1,5 @@
-import type { CSSProperties, Metadata } from "react";
+import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { olistCaseStudy } from "../../content/olist-case-study";
 import { ThemeToggle } from "../../theme-toggle";
