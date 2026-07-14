@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     description: "Aspiring Data Analyst & BBA Student",
     type: "website",
     url: productionUrl,
-    images: [{ url: openGraphImageUrl, width: 1732, height: 909, alt: "Sheikh Suhel Ahmed portfolio" }],
+    images: [{ url: openGraphImageUrl, width: 1731, height: 909, alt: "Sheikh Suhel Ahmed portfolio" }],
   },
   twitter: {
     card: "summary_large_image",
