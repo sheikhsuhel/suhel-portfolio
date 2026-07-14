@@ -195,6 +195,7 @@ input:focus-visible {
 }
 
 .main-nav {
+  order: 2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -232,6 +233,7 @@ input:focus-visible {
 }
 
 .header-actions {
+  order: 3;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1653,10 +1655,11 @@ input:focus-visible {
     overflow: hidden;
     border: 0 solid var(--border);
     border-radius: 14px;
-    background: var(--header);
+    background: var(--surface);
     box-shadow: var(--shadow);
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
     -webkit-backdrop-filter: blur(18px);
     backdrop-filter: blur(18px);
     transition: max-height 200ms ease, opacity 180ms ease, border-width 180ms ease;
@@ -1667,6 +1670,7 @@ input:focus-visible {
     border-width: 1px;
     opacity: 1;
     pointer-events: auto;
+    visibility: visible;
   }
 
   .main-nav a {
@@ -2316,6 +2320,12 @@ input:focus-visible {
   gap: 24px;
 }
 
+.case-study-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .case-hero {
   min-height: 760px;
   display: grid;
@@ -2389,10 +2399,47 @@ input:focus-visible {
   padding: clamp(30px, 5vw, 60px);
 }
 
-.case-story-card p:last-child {
+.case-story-card > p:not(.eyebrow) {
   margin: 24px 0 0;
   color: var(--muted);
   line-height: 1.8;
+}
+
+.project-context {
+  display: grid;
+  gap: 12px;
+  margin: 28px 0 0;
+}
+
+.project-context > div {
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.project-context dt,
+.dataset-source span {
+  color: var(--muted);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-context dd {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.project-context small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.65rem;
 }
 
 .dataset-grid {
@@ -2439,6 +2486,49 @@ input:focus-visible {
 .evidence-note,
 .chart-audit-note {
   margin: 24px 0 0;
+  border-left: 2px solid var(--blue);
+  background: rgba(54, 139, 224, 0.07);
+  color: var(--muted);
+  padding: 16px 18px;
+  font-size: 0.74rem;
+  line-height: 1.65;
+}
+
+.dataset-source {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.dataset-source-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 0.75fr 0.6fr 0.75fr;
+  gap: 18px;
+}
+
+.dataset-source-grid > div {
+  display: grid;
+  gap: 8px;
+}
+
+.dataset-source strong {
+  color: var(--text-soft);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.dataset-source > a {
+  display: inline-flex;
+  margin-top: 24px;
+  color: var(--blue-pale);
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
+.dataset-source > p {
+  margin: 18px 0 0;
   border-left: 2px solid var(--blue);
   background: rgba(54, 139, 224, 0.07);
   color: var(--muted);
@@ -2732,6 +2822,7 @@ input:focus-visible {
   }
 
   .dataset-grid,
+  .dataset-source-grid,
   .workflow-grid,
   .pivot-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2747,6 +2838,7 @@ input:focus-visible {
   .project-kpi-grid,
   .case-metric-grid,
   .dataset-grid,
+  .dataset-source-grid,
   .workflow-grid,
   .formula-grid,
   .pivot-grid,
@@ -2791,6 +2883,17 @@ input:focus-visible {
 
   .case-study-nav .brand-copy {
     display: none;
+  }
+
+  .case-study-nav-actions .button {
+    min-height: 42px;
+    padding-inline: 14px;
+    font-size: 0.64rem;
+  }
+
+  .project-context > div {
+    grid-template-columns: 1fr;
+    gap: 7px;
   }
 
   .case-hero {

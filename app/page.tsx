@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { olistCaseStudy } from "./content/olist-case-study";
+import { ThemeToggle } from "./theme-toggle";
 
-type Theme = "light" | "dark";
 type ChatMessage = { role: "assistant" | "user"; text: string };
 
 const PUBLIC_EMAIL = "sheikesuhelahmed@gmail.com";
@@ -89,7 +89,6 @@ function StatusBadge({ children, tone = "pending" }: { children: React.ReactNode
 }
 
 export default function Home() {
-  const [theme, setTheme] = useState<Theme>("dark");
   const [menuOpen, setMenuOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -101,24 +100,8 @@ export default function Home() {
   const chatLogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("suhel-portfolio-theme") as Theme | null;
-    const preferred = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-    const nextTheme = stored === "light" || stored === "dark" ? stored : preferred;
-    document.documentElement.dataset.theme = nextTheme;
-    const frame = window.requestAnimationFrame(() => setTheme(nextTheme));
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
-
-  useEffect(() => {
     chatLogRef.current?.scrollTo({ top: chatLogRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    document.documentElement.dataset.theme = nextTheme;
-    window.localStorage.setItem("suhel-portfolio-theme", nextTheme);
-  };
 
   const askQuestion = (question: string) => {
     const cleaned = question.trim();
@@ -156,20 +139,18 @@ export default function Home() {
           </span>
         </a>
 
+        <div className="header-actions">
+          <ThemeToggle />
+          <button className="icon-button menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-label="Toggle navigation">
+            <span aria-hidden="true">{menuOpen ? "×" : "≡"}</span>
+          </button>
+        </div>
+
         <nav className={menuOpen ? "main-nav nav-open" : "main-nav"} aria-label="Primary navigation">
           {navLinks.map(([label, id]) => (
             <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>{label}</a>
           ))}
         </nav>
-
-        <div className="header-actions">
-          <button className="icon-button theme-toggle" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}>
-            <span aria-hidden="true">{theme === "dark" ? "☀" : "◐"}</span>
-          </button>
-          <button className="icon-button menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-label="Toggle navigation">
-            <span aria-hidden="true">{menuOpen ? "×" : "≡"}</span>
-          </button>
-        </div>
       </header>
 
       <main id="main-content">
@@ -416,7 +397,7 @@ export default function Home() {
 
       <footer className="site-footer section-wrap">
         <div><span className="brand-mark">SA</span><p><strong>Sheikh Suhel Ahmed</strong><small>Aspiring Data Analyst &amp; BBA Student</small></p></div>
-        <p>Verified content · Private preview · Not published</p>
+        <p>Verified content · Evidence-backed portfolio</p>
         <a href="#home">Back to top ↑</a>
       </footer>
     </div>

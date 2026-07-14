@@ -21,7 +21,13 @@
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
+*.tmp
+*.temp
+*.bak
+*.log
+~$*
 
 # debug
 npm-debug.log*
@@ -42,3 +48,12 @@ next-env.d.ts
 /outputs/
 /work/
 /private-notes/
+/private-assets/
+/private-documents/
+/academic-documents/
+/group-reports/
+/local-evidence/
+/temp/
+/tmp/
+/.agents/
+/.codex/

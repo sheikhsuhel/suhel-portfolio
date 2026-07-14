@@ -1,6 +1,7 @@
 import type { CSSProperties, Metadata } from "react";
 import Link from "next/link";
 import { olistCaseStudy } from "../../content/olist-case-study";
+import { ThemeToggle } from "../../theme-toggle";
 
 export const metadata: Metadata = {
   title: "Olist Excel Analytics Case Study | Sheikh Suhel Ahmed",
@@ -22,7 +23,10 @@ export default function OlistCaseStudyPage() {
           <span className="brand-mark">SA</span>
           <span className="brand-copy"><strong>Sheikh Suhel Ahmed</strong><small>Portfolio</small></span>
         </Link>
-        <Link className="button button-secondary" href="/#projects">← Back to portfolio</Link>
+        <div className="case-study-nav-actions">
+          <ThemeToggle />
+          <Link className="button button-secondary" href="/#projects">← Back to portfolio</Link>
+        </div>
       </header>
 
       <main>
@@ -32,6 +36,7 @@ export default function OlistCaseStudyPage() {
             <div className="project-badges">
               <span className="status-badge status-known">Verified workbook</span>
               <span>Excel · Order operations</span>
+              <span>{olistCaseStudy.completionDate}</span>
             </div>
             <h1>{olistCaseStudy.title}</h1>
             <p>{olistCaseStudy.subtitle}</p>
@@ -54,6 +59,10 @@ export default function OlistCaseStudyPage() {
             <p>
               This Excel workbook organizes Olist order records into a structured analysis of order status, purchase-year volume, delivery speed, and delivery reliability. It combines row-level formulas, pivot tables, charts, and a compact KPI summary.
             </p>
+            <dl className="project-context">
+              <div><dt>Role</dt><dd>{olistCaseStudy.role}</dd></div>
+              <div><dt>Completed</dt><dd>{olistCaseStudy.completionDate}<small>{olistCaseStudy.completionDateEvidence}</small></dd></div>
+            </dl>
           </article>
           <article className="case-story-card">
             <p className="eyebrow">Business problem</p>
@@ -89,9 +98,16 @@ export default function OlistCaseStudyPage() {
               "is_late",
             ].map((field) => <code key={field}>{field}</code>)}
           </div>
-          <p className="evidence-note">
-            Source boundary: the workbook identifies the dataset as <code>olist_orders_dataset</code> but does not embed an original source URL. This case study therefore makes no unsupported source claim.
-          </p>
+          <aside className="dataset-source" aria-label="Dataset attribution">
+            <div className="dataset-source-grid">
+              <div><span>Dataset name</span><strong>{olistCaseStudy.dataset.name}</strong></div>
+              <div><span>Original publisher</span><strong>{olistCaseStudy.dataset.publisher}</strong></div>
+              <div><span>Source</span><strong>{olistCaseStudy.dataset.source}</strong></div>
+              <div><span>Accessed</span><strong>{olistCaseStudy.dataset.accessedDate}</strong></div>
+            </div>
+            <a href={olistCaseStudy.dataset.url} target="_blank" rel="noreferrer">View original dataset source ↗</a>
+            <p>{olistCaseStudy.dataset.attribution}</p>
+          </aside>
         </section>
 
         <section className="case-section section-wrap" id="workflow">
@@ -217,7 +233,7 @@ export default function OlistCaseStudyPage() {
 
       <footer className="site-footer section-wrap">
         <div><span className="brand-mark">SA</span><p><strong>Sheikh Suhel Ahmed</strong><small>Olist Excel Analytics Case Study</small></p></div>
-        <p>Verified workbook values · Not published</p>
+        <p>Verified workbook values · Evidence-backed case study</p>
         <a href="#top">Back to top ↑</a>
       </footer>
     </div>
