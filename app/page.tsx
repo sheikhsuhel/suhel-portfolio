@@ -10,7 +10,7 @@ type ChatMessage = { role: "assistant" | "user"; text: string };
 const PUBLIC_EMAIL = "sheikesuhelahmed@gmail.com";
 const LINKEDIN_URL = "https://www.linkedin.com/in/sheike-suhel-ahmed-17b195364";
 const CERTIFICATE_PATH = "/sheikh-suhel-ahmed-google-data-analytics-certificate.pdf";
-const CERTIFICATE_VERIFY_URL = "https://coursera.org/verify/professional-cert/FTD86QN9SA7Q";
+const CERTIFICATE_VERIFY_URL = "https://coursera.org/verify/professional-cert/FTD860N9SA70";
 
 const skills = [
   { name: "Excel", group: "Data tools", evidence: "Featured project" },
