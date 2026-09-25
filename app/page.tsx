@@ -12,6 +12,9 @@ const LINKEDIN_URL = "https://www.linkedin.com/in/sheike-suhel-ahmed-17b195364";
 const CERTIFICATE_PATH = "/sheikh-suhel-ahmed-google-data-analytics-certificate.pdf";
 const CERTIFICATE_VERIFY_URL = "https://coursera.org/verify/professional-cert/FTD860N9SA70";
 
+const IBM_PYTHON_CERTIFICATE_PATH = "/ibm-data-analysis-with-python.pdf";
+const IBM_PYTHON_CERTIFICATE_VERIFY_URL = "https://coursera.org/verify/T8U7BENJRMUJ";
+
 const skills = [
   { name: "Excel", group: "Data tools", evidence: "Featured project" },
   { name: "SQL", group: "Data tools", evidence: "Developing" },
@@ -326,6 +329,50 @@ export default function Home() {
               <a className="button button-quiet" href={CERTIFICATE_PATH} download>Download PDF</a>
             </div>
           </article>
+          <article className="certificate-card">
+  <div className="certificate-mark" aria-hidden="true">IBM</div>
+
+  <div className="certificate-copy">
+    <StatusBadge tone="known">Verified certificate</StatusBadge>
+
+    <p>IBM · Coursera</p>
+
+    <h3>Data Analysis with Python</h3>
+
+    <div className="certificate-meta">
+      <span>Completed</span>
+      <strong>September 26, 2026</strong>
+    </div>
+  </div>
+
+  <div className="certificate-actions">
+    <a
+      className="button button-primary"
+      href={IBM_PYTHON_CERTIFICATE_PATH}
+      target="_blank"
+      rel="noreferrer"
+    >
+      View Certificate
+    </a>
+
+    <a
+      className="button button-secondary"
+      href={IBM_PYTHON_CERTIFICATE_VERIFY_URL}
+      target="_blank"
+      rel="noreferrer"
+    >
+      Verify
+    </a>
+
+    <a
+      className="button button-quiet"
+      href={IBM_PYTHON_CERTIFICATE_PATH}
+      download
+    >
+      Download PDF
+    </a>
+  </div>
+</article>
         </section>
 
         <section className="ai-section section-wrap content-section" id="ask-suhel-ai">
