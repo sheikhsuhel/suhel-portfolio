@@ -279,6 +279,41 @@ export default function Home() {
               </div>
             </div>
           </article>
+          <article className="certificate-card">
+  <div className="certificate-mark" aria-hidden="true">AI</div>
+
+  <div className="certificate-copy">
+    <StatusBadge tone="known">Verified certificate</StatusBadge>
+
+    <p>Aspire Institute</p>
+
+    <h3>Leadership Program</h3>
+
+    <div className="certificate-meta">
+      <span>Program</span>
+      <strong>Aspire Institute Leadership Program</strong>
+    </div>
+  </div>
+
+  <div className="certificate-actions">
+    <a
+      className="button button-primary"
+      href={ASPIRE_CERTIFICATE_PATH}
+      target="_blank"
+      rel="noreferrer"
+    >
+      View Certificate
+    </a>
+
+    <a
+      className="button button-quiet"
+      href={ASPIRE_CERTIFICATE_PATH}
+      download
+    >
+      Download PDF
+    </a>
+  </div>
+</article>
         </section>
 
         <section className="projects section-wrap content-section" id="projects">
@@ -349,6 +384,8 @@ export default function Home() {
     <a
       className="button button-primary"
       href={IBM_PYTHON_CERTIFICATE_PATH}
+      
+      const ASPIRE_CERTIFICATE_PATH = "/aspire-institute-leadership-certificate.pdf";
       target="_blank"
       rel="noreferrer"
     >
