@@ -1,18 +1,3 @@
-                )}
-              </div>
-
-              <form
-                className="chat-form"
-                onSubmit={submitQuestion}
-              >
-                <label
-                  className="sr-only"
-                  htmlFor="recruiter-question"
-                >
-                  Ask a recruiter question
-                </label>
-
-                <input
                   id="recruiter-question"
                   value={chatInput}
                   onChange={(event) =>
