@@ -53,7 +53,9 @@ export function createProvider(env: Record<string, string | undefined> = process
         if (!response.ok) return {reason:"unavailable"};
         const data = await response.json();
         const raw = data.choices?.[0]?.message?.content;
-        return {turn:typeof raw === "string" ? grounded(raw, context.evidence) : undefined};
+        const turn = typeof raw === "string" ? grounded(raw, context.evidence) : undefined;
+        if (turn && models.includes(data.model)) turn.model = data.model;
+        return {turn};
       } catch { return {reason:"unavailable"}; }
     }
     return {reason:"unavailable"};

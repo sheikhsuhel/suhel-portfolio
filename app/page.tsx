@@ -612,7 +612,7 @@ export default function Home() {
                       <span className="message-avatar">AI</span>
                     )}
                     <div className="answer-body">
-                      {message.mode && <small className="response-mode">{message.mode}</small>}
+                      {message.mode && <small className="response-mode">{message.mode}</small>}{message.mode === "Cloud AI" && message.model && <small>{message.model}</small>}
                       <p>{message.text}</p>
                       {(message.references ?? (message.source ? [message.source] : [])).map(source => <a className="source-link" key={source.title} href={source.href}>{source.title} ↗</a>)}
                       {message.notice && <small>{message.notice}</small>}

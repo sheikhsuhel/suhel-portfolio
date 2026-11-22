@@ -12,7 +12,7 @@ const { askPortfolio } = await import("../app/content/chat-client.ts");
 const evidence = retrieve("Explain the Olist project.");
 const context = {question:"Explain the Olist project.",recentQuestions:[],evidence};
 const env = {GROQ_API_KEY:randomUUID()};
-const ok = (answer, sources=[1]) => Response.json({choices:[{message:{content:JSON.stringify({answer,sources})}}]});
+const ok = (answer, sources=[1]) => Response.json({model:"openai/gpt-oss-120b",choices:[{message:{content:JSON.stringify({answer,sources})}}]});
 const request = (body,origin="https://portfolio.test") => new Request("https://portfolio.test/api/chat",{method:"POST",headers:{origin,"Content-Type":"application/json"},body:JSON.stringify(body)});
 test("only configured free-plan Groq models activate the server adapter", () => {
   assert.equal(providerConfig({}),null);
@@ -34,6 +34,7 @@ test("mock provider receives a bounded grounded request and resolves model citat
   });
   const {turn}=await provider.generate(context);
   assert.equal(turn.mode,"Cloud AI");
+  assert.equal(turn.model,"openai/gpt-oss-120b");
   assert.equal(turn.source.href,"/projects/olist-excel-analytics");
 });
 test("model cannot supply invented sources, numbers or links",async()=>{
