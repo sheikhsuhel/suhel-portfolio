@@ -88,3 +88,35 @@ test("client bundle excludes server credentials and provider transport",async()=
   assert.ok(js.length);
   for(const file of js) assert.doesNotMatch(await readFile(new URL(file,dir),"utf8"),/GROQ_API_KEY|api\.groq\.com\/openai/);
 });
+
+test("route uses only allowlisted evidence, and rejected credentials never reach the browser",async t=>{
+  const prior=process.env.GROQ_API_KEY;
+  process.env.GROQ_API_KEY=env.GROQ_API_KEY;
+  t.after(()=>{if(prior===undefined)delete process.env.GROQ_API_KEY;else process.env.GROQ_API_KEY=prior;});
+  let calls=0;
+  t.mock.method(globalThis,"fetch",async(_,opts)=>{
+    calls++;
+    assert.doesNotMatch(opts.body,/private@example/);
+    return calls===1 ? ok("The workbook covers 99,441 orders.") : new Response(env.GROQ_API_KEY,{status:401});
+  });
+  const payload={question:context.question,history:["Contact me at private@example.org"]};
+  const success=await (await POST(request(payload))).json();
+  assert.equal(success.mode,"Cloud AI");
+  const failure=await (await POST(request(payload))).json();
+  assert.equal(failure.mode,"Portfolio sources");
+  assert.equal(JSON.stringify(failure).includes(env.GROQ_API_KEY),false);
+  await POST(request({...payload,question:"Was IBM Generative AI completed?"}));
+  assert.equal(calls,2);
+});
+test("client limit bounds calls without requiring a data store",async()=>{
+  const {admission}=await import("../app/server/chat-limit.ts");
+  const req=new Request("https://portfolio.test",{headers:{"x-vercel-forwarded-for":"192.0.2.8"}});
+  for(let i=0;i<4;i++) assert.equal(await admission(req),0);
+  assert.ok(await admission(req)>0);
+});
+test("cross-project comparisons cite both projects and course queries cite the PDF",()=>{
+  const comparison=lookup("Compare Olist and SQL",[]);
+  assert.equal(comparison.references.length,2);
+  assert.equal(lookup("Where is Data Foundations with AI?",[]).source.href,"/certificate-data-foundations-with-ai.pdf");
+  assert.equal(lookup("How much profit did Olist generate?",[]).source,undefined);
+});

@@ -21,6 +21,9 @@ export const sources = [
   { topic: "python-tech", tags: "python technique technical explain programming", href: "https://coursera.org/verify/T8U7BENJRMUJ", title: "Python coursework", fact: "Python can be used to clean, transform and summarize tabular data. Suhel’s documented evidence is IBM Data Analysis with Python coursework. The two published projects demonstrate Excel and SQL; neither establishes production Python experience." },
   { topic: "ibm-gen", tags: "generative genai", href: "/#certificates", title: "Published IBM evidence", fact: "The public portfolio verifies IBM Data Analysis with Python. It does not provide an issuer record or document confirming an IBM Generative AI credential." },
   { topic: "courses", tags: "era program award", href: "/#certificates", title: "Grameenphone Academy records", fact: "Three Grameenphone Academy course certificates are public. They establish course completion. A separate Data Analytics in the AI Era program award is not verified by these documents." },
+  { topic: "foundations", tags: "foundations", href: "/certificate-data-foundations-with-ai.pdf", title: "Data Foundations with AI", fact: "Grameenphone Academy’s Data Foundations with AI certificate names Sheikh Suhel and is dated August 17, 2026." },
+  { topic: "powered", tags: "powered", href: "/certificate-ai-powered-analytics.pdf", title: "AI-Powered Analytics", fact: "Grameenphone Academy’s AI-Powered Analytics certificate names Sheikh Suhel and is dated August 25, 2026." },
+  { topic: "influence", tags: "influence", href: "/certificate-from-insights-to-influence.pdf", title: "From Insights to Influence", fact: "Grameenphone Academy’s From Insights to Influence certificate names Sheikh Suhel and is dated August 31, 2026." },
   { topic: "cv", tags: "resume cv résumé", href: "/#contact", title: "Contact Suhel", fact: "There is no public CV on this site. You can request one using the contact details below." },
   { topic: "projects", tags: "projects portfolio website experience work examples", href: "/#projects", title: "Selected projects", fact: "Suhel’s portfolio features an Excel study of delivery reliability across 99,441 Olist orders and a SQL analysis of product sales across territories. Which one would you like to explore?" },
   { topic: "contact", tags: "contact email reach linkedin hire connect", href: "/#contact", title: "Contact Suhel", fact: "You can reach Suhel at sheikesuhelahmed@gmail.com. His LinkedIn profile is linked in the contact section." },
@@ -33,6 +36,10 @@ export function retrieve(question: string, previous?: PortfolioSource) {
   const words = new Set(query.match(/[a-z0-9]+/g) ?? []);
   // Known evidence gaps take precedence over topical similarity.
   if (/\b(salary|employer|internships?|years of experience|paid experience|professional experience|clients?|gpa|employment|work history)\b/.test(query)) return [];
+  if (/\b(revenue|profit|roi|salary|budget|savings|promotion|married|address|phone number)\b/.test(query)) return [];
+  if (/\bolist\b/.test(query) && /\bsql\b/.test(query)) return ["olist","sql"].map(topic=>sources.find(s=>s.topic===topic)!);
+  const course = /foundations with ai/.test(query) ? "foundations" : /ai.powered analytics/.test(query) ? "powered" : /insights to influence/.test(query) ? "influence" : "";
+  if (course) return sources.filter(s=>s.topic===course);
   if (/generative ai|genai/.test(query)) return sources.filter(s => s.topic === "ibm-gen");
   if (/grameenphone|data analytics in the ai era/.test(query)) return sources.filter(s => s.topic === "courses").reverse();
   if (/aspire|cohort 3/.test(query)) return sources.filter(s => s.topic === "aspire");
@@ -67,7 +74,8 @@ export function lookup(question: string, history: Turn[]): Turn {
   const matches = retrieve(question, previous);
   const source = matches[0];
   const detail = /detail|walk me through|in depth/i.test(question);
-  const references = matches.slice(0,detail ? 3 : 1);
+  const comparison = matches.some(s=>s.topic !== source?.topic);
+  const references = matches.slice(0,detail || comparison ? 3 : 1);
   const text = references.map(s => s.fact).join("\n\n") || (/^(hi|hello|hey|thanks)[!. ]*$/i.test(question) ? "Hello! Which project or credential would you like to explore?" : "The public portfolio doesn’t establish that. Try asking about a project, skill or credential.");
   return {role:"assistant", text, source, references, mode:"Portfolio sources"};
 }
