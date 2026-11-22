@@ -1,30 +1,22 @@
-# Sheikh Suhel Ahmed — Portfolio
+# Sheikh Suhel Ahmed � Data & Business Portfolio
 
-A responsive, verification-first portfolio for Sheikh Suhel Ahmed, an aspiring Data Analyst and BBA student at North South University.
+The existing React App Router portfolio includes the Olist Excel case study, SQL project downloads, education, skills and certificate documents. The production domain is https://suhel-portfolio-blue.vercel.app/.
 
-## Included content
+## Development
 
-- Approved professional headshot
-- Verified education and intended MIS major
-- Featured Olist Excel Analytics case study
-- Google Data Analytics Professional Certificate with view, verify, and download actions
-- Local Ask Suhel AI recruiter interface with keyboard submission
-- Approved public email and LinkedIn contact channels
-- Responsive light and dark themes
+Use Node 22.15 or later and pnpm. Run `pnpm install --frozen-lockfile`, `pnpm dev`, `pnpm lint` and `pnpm test`. The test command builds the existing Vinext worker, checks server-rendered pages and exercises the assistant and analytics routes. Vercel uses its existing Git integration.
 
-Empty CV, activity, achievement, phone, and GitHub sections remain hidden until verified information is available.
+## Ask Suhel AI
 
-## Local preview
+The assistant retrieves local portfolio passages, carries the previous topic into follow-ups and links to its evidence. Browsers with an already-installed, available Prompt API language model synthesize replies locally. Other browsers return the retrieved passage. The model is never downloaded automatically. Chat text stays in page memory and is excluded from analytics.
 
-```bash
-pnpm dev
-```
+## Private traffic dashboard
 
-## Verification
+Visit `/admin` over HTTPS. Configure these server-only variables in the existing Vercel project and redeploy to activate collection:
 
-```bash
-pnpm lint
-pnpm test
-```
+- `ADMIN_ANALYTICS_TOKEN` - a random printable ASCII password of at least 32 characters. Use the HTTP Basic username `admin`.
+- `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` - credentials for a dedicated free Upstash Redis database.
 
-The site is intentionally not deployed yet.
+The dashboard locks when its password is absent. Collection is disabled until all three variables are configured. Counts begin at activation. Each allowlisted event increments one UTC daily counter, retained for 35 days. The dashboard displays seven days of pageviews, active reading and engagement. No cookies, chat text, IP addresses or visitor identifiers are written by the application. Do Not Track disables client events. Public counts are directional and can include bots or repeat visits.
+
+The three additional course PDFs are listed with their document titles and dates. The Google and IBM cards also link to the issuer verification records.

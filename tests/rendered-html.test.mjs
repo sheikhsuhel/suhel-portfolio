@@ -66,7 +66,8 @@ test("keeps claims bounded and supports Enter-key submission", async () => {
 
   assert.match(page, /event\.key === "Enter"/);
   assert.match(page, /event\.nativeEvent\.isComposing/);
-  assert.match(page, /No percentage proficiency scores are claimed/);
+  assert.match(page, /Project queries/);
+  assert.match(page, /IBM coursework/);
   assert.match(caseStudy, /7_827/);
   assert.match(caseStudy, /2_965/);
   assert.doesNotMatch(page, /skill-progress|skill-percentage/);
