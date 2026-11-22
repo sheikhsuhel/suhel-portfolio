@@ -13,6 +13,7 @@ import { olistCaseStudy } from "./content/olist-case-study";
 import { ThemeToggle } from "./theme-toggle";
 
 import type { Turn as ChatMessage } from "./content/assistant";
+import { ModelControl } from "./model-control";
 import { record } from "./analytics-events";
 
 const PUBLIC_EMAIL = "sheikesuhelahmed@gmail.com";
@@ -574,6 +575,7 @@ export default function Home() {
               <div className="local-note">
                 <span>Private conversation</span>
                 <p>Questions stay in your browser. An available on-device language model can summarize retrieved portfolio evidence.</p>
+                <ModelControl />
               </div>
             </div>
 
