@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { modelAvailability, prepareModel } from "./content/assistant";
 
-export function ModelControl() {
+export function ModelControl({onReady}: {onReady: (ready: boolean) => void}) {
   const [status, setStatus] = useState("checking");
   const [progress, setProgress] = useState(0);
   useEffect(() => { void modelAvailability().then(setStatus).catch(() => setStatus("unavailable")); }, []);
+  useEffect(() => { onReady(status === "available"); }, [status, onReady]);
   async function enable() {
     setStatus("preparing");
     try { await prepareModel(setProgress); setStatus("available"); }

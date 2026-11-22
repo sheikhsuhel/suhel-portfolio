@@ -1,4 +1,4 @@
-# Sheikh Suhel Ahmed � Data & Business Portfolio
+# Sheikh Suhel Ahmed · Data & Business Portfolio
 
 The existing React App Router portfolio includes the Olist Excel case study, SQL project downloads, education, skills and certificate documents. The production domain is https://suhel-portfolio-blue.vercel.app/.
 
@@ -8,7 +8,15 @@ Use Node 22.15 or later and pnpm. Run `pnpm install --frozen-lockfile`, `pnpm de
 
 ## Ask Suhel AI
 
-The assistant retrieves local portfolio passages, carries the previous topic into follow-ups and links to its evidence. Browsers with an already-installed, available Prompt API language model synthesize replies locally. Other browsers return the retrieved passage. On eligible devices, visitors can explicitly enable a model download. The assistant works during setup. Chat text stays in page memory and is excluded from analytics.
+Ask Suhel selects public evidence by project, topic and question terms before requesting generation. The UI labels every answer with its actual mode and links to the supporting records. Only the last three visitor questions and a public source identifier cross the chat API boundary. The site does not log conversation text.
+
+To enable cloud answers, set `GROQ_API_KEY` as a **server-only Production** variable in the existing Vercel project, using a key from a Groq **Free** organization, then redeploy. Optional variables are `AI_PROVIDER=groq` and `AI_MODEL=openai/gpt-oss-120b`. Without an explicit model, a model access error also permits the documented Free-plan alternative `openai/gpt-oss-20b`. Set `AI_PROVIDER=off` to disable cloud generation. The app does not inspect billing or upgrade accounts.
+
+The server enforces an 8 KiB body limit, 600 characters per question, an eight-second provider deadline, a maximum of two attempts and 640 completion tokens. Replies are buffered so citation IDs and numbers can be checked before display. The service applies per-minute limits (4 requests per caller, 12 per instance); existing Redis credentials enable shared counters across instances. Groq organization quotas apply across all instances. Access tokens and raw conversation text are excluded from analytics.
+
+Missing configuration, throttling and provider errors yield source passages. A visitor with an available local browser model can then choose **Expand on device**. A local model download always requires an explicit action. The three Grameenphone Academy PDFs verify individual courses. The public Aspire document verifies the program and 40 hours. Cohort number, IBM Generative AI and a separate Grameenphone program award need further public evidence.
+
+Provider references: [models](https://console.groq.com/docs/models), [Free limits](https://console.groq.com/docs/rate-limits), [billing](https://console.groq.com/docs/billing-faqs), [service terms](https://console.groq.com/docs/legal/services-agreement).
 
 ## Private traffic dashboard
 

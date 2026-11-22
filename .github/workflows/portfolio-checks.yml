@@ -1,7 +1,7 @@
 name: Portfolio checks
 on:
   push:
-    branches: [main, portfolio-upgrade]
+    branches: [main, portfolio-upgrade, ask-suhel-cloud]
   pull_request:
 permissions:
   contents: read
@@ -21,3 +21,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm test
+
+      - name: Verify mobile chat in Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/chat-browser" --ignore-scripts --no-audit --no-fund playwright-core@1.55.0
+          pnpm exec next dev --hostname 127.0.0.1 --port 4173 > "$RUNNER_TEMP/chat-dev.log" 2>&1 &
+          pid=$!
+          trap 'kill "$pid" || true' EXIT
+          curl --retry 20 --retry-delay 1 --retry-connrefused --fail --silent http://127.0.0.1:4173/ > /dev/null
+          CHROME_PATH="$(which google-chrome)" BROWSER_TEST_MODULES="$RUNNER_TEMP/chat-browser" node tests/mobile-chat.mjs

@@ -30,7 +30,7 @@ test("on-device generation receives retrieved evidence and releases its session"
     destroy: () => {closed = true;},
   })};
   t.after(() => {delete globalThis.LanguageModel;});
-  assert.equal((await answer("What degree is he studying?", [])).text, "Suhel studies business.");
+  assert.equal((await answer("What degree is he studying?", [], true)).text, "Suhel studies business.");
   assert.equal(closed, true);
 });
 

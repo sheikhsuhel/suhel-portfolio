@@ -46,14 +46,11 @@ const skills = [
 ];
 
 const suggestedQuestions = [
-  "What is Suhel studying?",
-  "Tell me about Suhel's Olist project.",
-  "Which Excel techniques did Suhel use?",
-  "What certificates has Suhel completed?",
-  "Tell me about the Aspire certificate.",
-  "Tell me about IBM Data Analysis with Python.",
-  "What skills does Suhel have?",
-  "How can I contact Suhel?",
+  "Tell me about Sheikh Suhel Ahmed.",
+  "Explain the Olist project.",
+  "What SQL skills does he demonstrate?",
+  "What business insights did he discover?",
+  "Which certificates has he completed?",
 ];
 
 const navLinks = [
@@ -120,17 +117,31 @@ export default function Home() {
 
   const [busy, setBusy] = useState(false);
   const pending = useRef(false);
-  async function askQuestion(question: string) {
+  const [deviceReady, setDeviceReady] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  async function copyAnswer(text: string) {
+    try { await navigator.clipboard.writeText(text); setFeedback("Answer copied."); }
+    catch { setFeedback("Copy unavailable. Select the answer text to copy it."); }
+  }
+  function clearChat() {
+    if (pending.current) return;
+    setMessages([]); setChatInput(""); setFeedback("Conversation cleared."); inputRef.current?.focus();
+  }
+  async function askQuestion(question: string, retry = false, useDevice = false) {
     const cleaned = question.trim().slice(0, 600);
     if (!cleaned || pending.current) return;
     pending.current = true;
     setBusy(true);
-    setChatInput("");
-    setMessages(current => [...current, {role: "user", text: cleaned}]);
-    record("question");
+    setFeedback("");
+    const history = (retry ? messages.slice(0,-2) : messages).slice(-10);
+    if (!retry) { setChatInput(""); record("question"); }
+    setMessages([...history, {role:"user",text:cleaned}]);
     try {
-      const { answer } = await import("./content/assistant");
-      const response = await answer(cleaned, messages);
+      const response = useDevice
+        ? await (await import("./content/assistant")).answer(cleaned, history, true)
+        : await (await import("./content/chat-client")).askPortfolio(cleaned, history);
+      if (useDevice && response.mode !== "On-device AI") setFeedback("Local generation is unavailable. Showing portfolio evidence.");
       setMessages(current => [...current, response]);
     } catch {
       setMessages(current => [...current, {role: "assistant", text: "I couldn’t load the portfolio evidence. Please try again."}]);
@@ -145,8 +156,8 @@ export default function Home() {
     askQuestion(chatInput);
   };
 
-  const submitOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && !event.nativeEvent.isComposing) {
+  const submitOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
       event.preventDefault();
       askQuestion(chatInput);
     }
@@ -573,9 +584,9 @@ export default function Home() {
               </div>
 
               <div className="local-note">
-                <span>Private conversation</span>
-                <p>Questions stay in your browser. An available on-device language model can summarize retrieved portfolio evidence.</p>
-                <ModelControl />
+                <span>How answers work</span>
+                <p>When cloud AI is enabled, your question, recent questions and relevant public portfolio passages may be sent to Groq. Please keep questions professional and omit private information.</p>
+                <ModelControl onReady={setDeviceReady} />
               </div>
             </div>
 
@@ -588,7 +599,7 @@ export default function Home() {
                     <small><i /> Portfolio evidence</small>
                   </p>
                 </div>
-                <span className="offline-label">On device</span>
+                <button className="chat-action" disabled={busy || !messages.length} onClick={clearChat}>Clear conversation</button>
               </div>
 
               <div className="chat-log" ref={chatLogRef} aria-live="polite">
@@ -600,17 +611,32 @@ export default function Home() {
                     {message.role === "assistant" && (
                       <span className="message-avatar">AI</span>
                     )}
-                    <div><p>{message.text}</p>{message.source && <a className="source-link" href={message.source.href}>{message.source.title} ↗</a>}</div>
+                    <div className="answer-body">
+                      {message.mode && <small className="response-mode">{message.mode}</small>}
+                      <p>{message.text}</p>
+                      {(message.references ?? (message.source ? [message.source] : [])).map(source => <a className="source-link" key={source.title} href={source.href}>{source.title} ↗</a>)}
+                      {message.notice && <small>{message.notice}</small>}
+                      {message.role === "assistant" && index > 0 && <div className="answer-actions">
+                        <button className="chat-action" onClick={() => copyAnswer(message.text)}>Copy answer</button>
+                        {index === messages.length-1 && messages[index-1]?.role === "user" && <>
+                          <button className="chat-action" disabled={busy} onClick={() => askQuestion(messages[index-1].text,true)}>Retry</button>
+                          {deviceReady && message.mode === "Portfolio sources" && message.source && <button className="chat-action" disabled={busy} onClick={() => askQuestion(messages[index-1].text,true,true)}>Expand on device</button>}
+                        </>}
+                      </div>}
+                    </div>
                   </div>
                 ))}
               </div>
 
-              {busy && <small role="status">Reading portfolio evidence…</small>}
+              <small role="status" className="chat-feedback">{busy ? "Reading portfolio evidence…" : feedback}</small>
               <form className="chat-form" onSubmit={submitQuestion}>
                 <label className="sr-only" htmlFor="recruiter-question">
                   Ask a recruiter question
                 </label>
-                <input
+                <textarea
+                  ref={inputRef}
+                  rows={2}
+                  aria-describedby="chat-keys"
                   id="recruiter-question"
                   maxLength={600}
                   value={chatInput}
@@ -619,11 +645,11 @@ export default function Home() {
                   placeholder="Ask about education, skills, projects..."
                   autoComplete="off"
                 />
-                <button disabled={busy} type="submit" aria-label="Send question">↑</button>
+                <button disabled={busy || !chatInput.trim()} type="submit" aria-label="Send question">↑</button>
               </form>
 
               <p className="chat-disclaimer">
-                For other questions, email Suhel at {PUBLIC_EMAIL}.
+                <span id="chat-keys">Enter to send · Shift+Enter for a new line</span>
               </p>
             </div>
           </div>

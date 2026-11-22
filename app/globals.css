@@ -1508,7 +1508,7 @@ input:focus-visible {
   box-shadow: 0 0 0 3px rgba(54, 139, 224, 0.08);
 }
 
-.chat-form input {
+.chat-form textarea {
   min-width: 0;
   border: 0;
   outline: 0;
@@ -1518,7 +1518,7 @@ input:focus-visible {
   font-size: 0.72rem;
 }
 
-.chat-form input::placeholder {
+.chat-form textarea::placeholder {
   color: var(--muted);
 }
 
@@ -2935,8 +2935,19 @@ input:focus-visible {
 .content-section { content-visibility: auto; contain-intrinsic-size: auto 48rem; }
 @media (max-width: 680px) {
   .project-kpi-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  .chat-window, .chat-message, .chat-form input { min-width: 0; }
+  .chat-window, .chat-message, .chat-form textarea { min-width: 0; }
   .chat-message { overflow-wrap: anywhere; }
-  .chat-form input { font-size: 1rem; }
+  .chat-form textarea { font-size: 1rem; }
   .hero-actions a, .question-list button { min-height: 44px; }
 }
+
+.chat-form textarea { width: 100%; resize: vertical; max-height: 9rem; font: inherit; line-height: 1.45; padding-block: .45rem; }
+.chat-form { align-items: end; }
+.chat-action { color: var(--blue-pale); background: transparent; border: 1px solid var(--border); border-radius: .5rem; padding: .4rem .65rem; cursor: pointer; font: inherit; font-size: .8rem; }
+.answer-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+.answer-body { min-width: 0; } .answer-body p { white-space: pre-wrap; }
+.answer-body small, .answer-body .source-link { display: block; }
+.response-mode, .chat-feedback { color: var(--text-soft); font-size: .75rem; }
+.chat-feedback:not(:empty) { padding: .5rem 1rem; }
+.chat-window button:disabled { opacity: .55; cursor: default; }
+@media (max-width: 680px) { .chat-action { min-height: 44px; } .chat-form textarea { font-size: 16px; } }
