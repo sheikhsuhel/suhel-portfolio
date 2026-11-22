@@ -8,7 +8,7 @@ Use Node 22.15 or later and pnpm. Run `pnpm install --frozen-lockfile`, `pnpm de
 
 ## Ask Suhel AI
 
-The assistant retrieves local portfolio passages, carries the previous topic into follow-ups and links to its evidence. Browsers with an already-installed, available Prompt API language model synthesize replies locally. Other browsers return the retrieved passage. The model is never downloaded automatically. Chat text stays in page memory and is excluded from analytics.
+The assistant retrieves local portfolio passages, carries the previous topic into follow-ups and links to its evidence. Browsers with an already-installed, available Prompt API language model synthesize replies locally. Other browsers return the retrieved passage. On eligible devices, visitors can explicitly enable a model download. The assistant works during setup. Chat text stays in page memory and is excluded from analytics.
 
 ## Private traffic dashboard
 

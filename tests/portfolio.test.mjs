@@ -19,7 +19,7 @@ test("portfolio retrieval answers specific questions and retains the topic", asy
   assert.match(follow.text, /timestamps/);
   const sql = await answer("What about SQL?", [olist, follow]);
   assert.match(sql.text, /7,591/);
-  assert.match((await answer("What is his salary?", [])).text, /couldn't find/);
+  assert.match((await answer("What is his salary?", [])).text, /Try asking about/);
 });
 
 test("on-device generation receives retrieved evidence and releases its session", async t => {
