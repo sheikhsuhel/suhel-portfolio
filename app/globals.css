@@ -2922,3 +2922,21 @@ input:focus-visible {
     gap: 14px;
   }
 }
+
+/* Keep the work samples and their sources easy to scan in either theme. */
+.featured-project + .featured-project, .certificate-card + .certificate-card { margin-top: 1rem; }
+.project-kpi-grid strong { font-variant-numeric: tabular-nums; }
+.course-documents { padding: 1.25rem; margin-top: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; }
+.course-documents summary { font-weight: 650; cursor: pointer; }
+.course-documents li { margin-block: .7rem; color: var(--text-soft); }
+.source-link, .course-documents a { color: var(--blue-pale); text-decoration: underline; text-underline-offset: .2em; }
+.source-link { display: inline-block; margin-top: .6rem; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.content-section { content-visibility: auto; contain-intrinsic-size: auto 48rem; }
+@media (max-width: 680px) {
+  .project-kpi-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .chat-window, .chat-message, .chat-form input { min-width: 0; }
+  .chat-message { overflow-wrap: anywhere; }
+  .chat-form input { font-size: 1rem; }
+  .hero-actions a, .question-list button { min-height: 44px; }
+}

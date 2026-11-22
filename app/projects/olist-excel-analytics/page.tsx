@@ -5,6 +5,8 @@ import { olistCaseStudy } from "../../content/olist-case-study";
 import { ThemeToggle } from "../../theme-toggle";
 
 export const metadata: Metadata = {
+  alternates: {canonical: "/projects/olist-excel-analytics"},
+  openGraph: {title: "Olist Order Delivery Analysis | Sheikh Suhel Ahmed", url: "/projects/olist-excel-analytics", images: ["/og.png"]},
   title: "Olist Excel Analytics Case Study | Sheikh Suhel Ahmed",
   description: "A verified Excel case study covering 99,441 Olist orders, delivery KPIs, pivot tables, formulas, charts, findings, and recommendations.",
 };

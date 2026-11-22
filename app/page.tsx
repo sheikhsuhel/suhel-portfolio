@@ -12,10 +12,8 @@ import {
 import { olistCaseStudy } from "./content/olist-case-study";
 import { ThemeToggle } from "./theme-toggle";
 
-type ChatMessage = {
-  role: "assistant" | "user";
-  text: string;
-};
+import type { Turn as ChatMessage } from "./content/assistant";
+import { record } from "./analytics-events";
 
 const PUBLIC_EMAIL = "sheikesuhelahmed@gmail.com";
 const LINKEDIN_URL =
@@ -39,9 +37,9 @@ const CSV_FILE = "/product_analysis.csv";
 
 const skills = [
   { name: "Excel", group: "Data tools", evidence: "Featured project" },
-  { name: "SQL", group: "Data tools", evidence: "Developing" },
+  { name: "SQL", group: "Data tools", evidence: "Project queries" },
   { name: "Power BI", group: "Data tools", evidence: "Developing" },
-  { name: "Python", group: "Data tools", evidence: "Developing" },
+  { name: "Python", group: "Data tools", evidence: "IBM coursework" },
   { name: "Business Analysis", group: "Business", evidence: "Developing" },
   { name: "Case Competitions", group: "Business", evidence: "Developing" },
 ];
@@ -59,162 +57,14 @@ const suggestedQuestions = [
 
 const navLinks = [
   ["Home", "home"],
+  ["Projects", "projects"],
   ["About", "about"],
   ["Skills", "skills"],
   ["Education", "education"],
-  ["Projects", "projects"],
-  ["Certificate", "certificates"],
+  ["Credentials", "certificates"],
   ["Ask AI", "ask-suhel-ai"],
   ["Contact", "contact"],
 ];
-
-function getVerifiedAnswer(question: string) {
-  const query = question.toLowerCase().trim();
-
-  if (
-    query === "hi" ||
-    query === "hello" ||
-    query === "hey" ||
-    query.includes("good morning") ||
-    query.includes("good afternoon") ||
-    query.includes("good evening")
-  ) {
-    return "Hello! I'm Ask Suhel AI. I can answer questions about Suhel's education, skills, projects, certificates, and professional contact information using information presented in this portfolio.";
-  }
-
-  if (
-    query.includes("who is suhel") ||
-    query.includes("who is sheikh") ||
-    query.includes("tell me about suhel") ||
-    query.includes("about suhel") ||
-    query.includes("introduce suhel") ||
-    query === "suhel"
-  ) {
-    return "Sheikh Suhel Ahmed is a BBA student at North South University and an aspiring Data Analyst and Business Analyst. He is developing practical data-analysis skills alongside his business education.";
-  }
-
-  if (
-    query.includes("study") ||
-    query.includes("studying") ||
-    query.includes("education") ||
-    query.includes("university") ||
-    query.includes("degree") ||
-    query.includes("bba") ||
-    query.includes("major") ||
-    query.includes("graduation")
-  ) {
-    return "Suhel is studying for a Bachelor of Business Administration at North South University. His intended major is Management Information Systems, and his expected graduation year is 2029.";
-  }
-
-  if (
-    query.includes("career") ||
-    query.includes("future") ||
-    query.includes("job") ||
-    query.includes("aspiration")
-  ) {
-    return "Suhel's career direction focuses on data analysis and business analysis. He is developing Excel, SQL, Power BI, Python, business-analysis, and case-solving skills.";
-  }
-
-  if (
-    query.includes("olist") ||
-    query.includes("e-commerce project") ||
-    query.includes("ecommerce project") ||
-    query.includes("featured project") ||
-    query.includes("project finding") ||
-    query.includes("project findings")
-  ) {
-    return "Suhel's featured Excel project analyzes 99,441 Olist orders. The workbook reports 96,478 delivered orders, an average delivery time of 12.5 days, a 91.9% on-time rate, and 7,827 late orders. The case study documents formulas, pivot tables, charts, findings, and recommendations.";
-  }
-
-  if (
-    query.includes("99441") ||
-    query.includes("99,441") ||
-    query.includes("96478") ||
-    query.includes("96,478") ||
-    query.includes("7827") ||
-    query.includes("7,827") ||
-    query.includes("12.5") ||
-    query.includes("91.9")
-  ) {
-    return "The Olist workbook contains 99,441 orders. It reports 96,478 delivered orders, an average delivery time of 12.5 days, a 91.9% on-time rate, and 7,827 late orders.";
-  }
-
-  if (
-    query.includes("excel") ||
-    query.includes("spreadsheet") ||
-    query.includes("formula") ||
-    query.includes("pivot") ||
-    query.includes("chart") ||
-    query.includes("kpi")
-  ) {
-    return "Suhel's Olist Excel project uses a structured Excel table, IF/AND/OR/DAYS formulas, pivot tables, charts, and a KPI summary.";
-  }
-
-  if (
-    query.includes("skill") ||
-    query.includes("technology") ||
-    query.includes("tools") ||
-    query.includes("technical")
-  ) {
-    return "The portfolio lists Excel, SQL, Power BI, Python, Business Analysis, and Case Competitions. Excel is supported by a featured project; the other areas are presented as developing skills.";
-  }
-
-  if (query.includes("sql") || query.includes("database") || query.includes("queries")) {
-    return "SQL is one of Suhel's developing data-tool skills. His product-analysis project includes a downloadable SQL query file and CSV dataset.";
-  }
-
-  if (query.includes("power bi") || query.includes("powerbi") || query.includes("dashboard")) {
-    return "Power BI is one of Suhel's developing data-tool skills.";
-  }
-
-  if (query.includes("python") && !query.includes("ibm")) {
-    return "Python is one of Suhel's developing data-tool skills.";
-  }
-
-  if (
-    query.includes("certificates") ||
-    query.includes("certifications") ||
-    query.includes("credentials")
-  ) {
-    return "The portfolio includes the Google Data Analytics Professional Certificate, IBM Data Analysis with Python certificate, and Aspire Institute Leadership Program certificate.";
-  }
-
-  if (query.includes("google")) {
-    return "Suhel completed the Google Data Analytics Professional Certificate through Google and Coursera on March 24, 2026. The portfolio provides certificate and verification links.";
-  }
-
-  if (query.includes("ibm")) {
-    return "Suhel completed IBM Data Analysis with Python through IBM and Coursera. The portfolio provides certificate and verification links.";
-  }
-
-  if (query.includes("aspire") || query.includes("leadership")) {
-    return "The Aspire Institute Leadership Program certificate is included in the portfolio's Certificate section.";
-  }
-
-  if (
-    query.includes("contact") ||
-    query.includes("email") ||
-    query.includes("reach") ||
-    query.includes("linkedin") ||
-    query.includes("recruiter")
-  ) {
-    return `You can contact Suhel at ${PUBLIC_EMAIL} or connect through the LinkedIn profile linked in the Contact section.`;
-  }
-
-  if (query.includes("cv") || query.includes("resume")) {
-    return "A public CV is not currently included in this portfolio.";
-  }
-
-  if (query.includes("portfolio") || query.includes("website") || query.includes("github")) {
-    return "This portfolio presents Suhel's education, skills, certificates, projects, and contact information. Ask Suhel AI uses pre-written answers rather than an external AI API.";
-  }
-
-  if (query.includes("thank") || query.includes("thanks")) {
-    return "You're welcome! Feel free to ask another question about Suhel's portfolio.";
-  }
-
-  return `I do not have a verified answer to that question yet. You can ask about education, skills, the Olist project, SQL, certificates, or contact information. For other questions, email ${PUBLIC_EMAIL}.`;
-}
 
 function SectionHeading({
   eyebrow,
@@ -263,22 +113,31 @@ export default function Home() {
   useEffect(() => {
     chatLogRef.current?.scrollTo({
       top: chatLogRef.current.scrollHeight,
-      behavior: "smooth",
+      behavior: "auto",
     });
   }, [messages]);
 
-  const askQuestion = (question: string) => {
-    const cleaned = question.trim();
-    if (!cleaned) return;
-
-    setMessages((current) => [
-      ...current,
-      { role: "user", text: cleaned },
-      { role: "assistant", text: getVerifiedAnswer(cleaned) },
-    ]);
-
+  const [busy, setBusy] = useState(false);
+  const pending = useRef(false);
+  async function askQuestion(question: string) {
+    const cleaned = question.trim().slice(0, 600);
+    if (!cleaned || pending.current) return;
+    pending.current = true;
+    setBusy(true);
     setChatInput("");
-  };
+    setMessages(current => [...current, {role: "user", text: cleaned}]);
+    record("question");
+    try {
+      const { answer } = await import("./content/assistant");
+      const response = await answer(cleaned, messages);
+      setMessages(current => [...current, response]);
+    } catch {
+      setMessages(current => [...current, {role: "assistant", text: "I couldn’t load the portfolio evidence. Please try again."}]);
+    } finally {
+      pending.current = false;
+      setBusy(false);
+    }
+  }
 
   const submitQuestion = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -314,6 +173,7 @@ export default function Home() {
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
+            aria-controls="primary-nav"
             aria-label="Toggle navigation"
           >
             <span aria-hidden="true">{menuOpen ? "×" : "≡"}</span>
@@ -322,7 +182,7 @@ export default function Home() {
 
         <nav
           className={menuOpen ? "main-nav nav-open" : "main-nav"}
-          aria-label="Primary navigation"
+          id="primary-nav" aria-label="Primary navigation"
         >
           {navLinks.map(([label, id]) => (
             <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>
@@ -339,17 +199,16 @@ export default function Home() {
 
           <div className="hero-copy">
             <div className="hero-kicker">
-              <span /> Verification-first portfolio
+              <span /> Data &amp; Business Portfolio
             </div>
 
             <h1>
               Sheikh Suhel Ahmed
-              <span>Aspiring Data Analyst &amp; BBA Student</span>
+              <span>Data &amp; business analysis</span>
             </h1>
 
             <p className="hero-lead">
-              Developing data and business-analysis skills through structured
-              learning and evidence-backed work at North South University.
+              I study business at North South University and use Excel and SQL to investigate delivery reliability, product sales and the decisions behind them.
             </p>
 
             <div className="hero-actions">
@@ -381,10 +240,7 @@ export default function Home() {
           </div>
 
           <aside className="profile-panel" aria-label="Profile">
-            <div className="panel-topline">
-              <span>PROFILE / VERIFIED</span>
-              <StatusBadge tone="known">Approved photo</StatusBadge>
-            </div>
+
 
             <div className="headshot-frame">
               <Image
@@ -421,9 +277,105 @@ export default function Home() {
           </aside>
         </section>
 
+        {/* PROJECTS: EXCEL + SQL + CSV */}
+        <section className="projects section-wrap content-section" id="projects">
+          <SectionHeading
+            eyebrow="Projects"
+            title="Selected projects"
+            body="Explore the featured Excel case study and download the SQL query file and CSV dataset for the product-analysis project."
+          />
+
+          <article className="featured-project">
+            <div className="featured-project-copy">
+              <div className="project-badges">
+                <StatusBadge tone="known">Featured project</StatusBadge>
+                <span>Excel analytics</span>
+              </div>
+
+              
+              <h3>{olistCaseStudy.title}</h3>
+              <p>{olistCaseStudy.subtitle}</p>
+
+              <div className="project-techniques">
+                <span>Formulas</span>
+                <span>Pivot tables</span>
+                <span>KPI summary</span>
+                <span>Charts</span>
+              </div>
+
+              <a className="button button-primary" href={`/projects/${olistCaseStudy.slug}`}>
+                Read the Case Study <span aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            <div className="project-kpi-grid" aria-label="Olist project metrics">
+              {olistCaseStudy.metrics.slice(0, 4).map((metric) => (
+                <div key={metric.label}>
+                  <span>{metric.label}</span>
+                  <strong>{metric.value}</strong>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="featured-project">
+            <div className="featured-project-copy">
+              <div className="project-badges">
+                <StatusBadge tone="known">Downloadable files</StatusBadge>
+                <span>SQL · CSV</span>
+              </div>
+
+              
+              <h3>Product Analysis Using SQL</h3>
+              <p>
+                Which territories sold the selected black ML and MO products? Two queries filter product records and trace sales through order details, order headers and territories.
+              </p>
+
+              <div className="project-techniques">
+                <span>SELECT</span>
+                <span>WHERE</span>
+                <span>ORDER BY</span>
+                <span>INNER JOIN</span>
+              </div>
+
+              <div className="hero-actions">
+                <a className="button button-primary" href={SQL_FILE} download>
+                  Download SQL <span aria-hidden="true">↓</span>
+                </a>
+                <a className="button button-secondary" href={CSV_FILE} download>
+                  Download CSV <span aria-hidden="true">↓</span>
+                </a>
+              </div>
+
+              <p>
+                Each CSV row is a matched sales detail. A product can appear in multiple rows and territories.
+              </p>
+            </div>
+
+            <div className="project-kpi-grid">
+              <div>
+                <span>Sales detail rows</span>
+                <strong>7,591</strong>
+              </div>
+              <div>
+                <span>Products</span>
+                <strong>25</strong>
+              </div>
+              <div>
+                <span>Territories</span>
+                <strong>10</strong>
+              </div>
+              <div>
+                <span>Joined tables</span>
+                <strong>4</strong>
+              </div>
+            </div>
+          </article>
+        </section>
+
         <section className="about section-wrap content-section" id="about">
           <SectionHeading
-            eyebrow="01 / About Me"
+            eyebrow="About Me"
             title="A business foundation, growing through data."
             body="A concise profile based on education, career direction, and current learning areas."
           />
@@ -456,9 +408,9 @@ export default function Home() {
 
         <section className="skills section-wrap content-section" id="skills">
           <SectionHeading
-            eyebrow="02 / Skills"
-            title="Skills supported by honest evidence."
-            body="Excel is demonstrated through the featured case study. Other areas are active learning priorities."
+            eyebrow="Skills"
+            title="Skills in practice"
+            body="Explore the project and course evidence behind each skill."
           />
 
           <div className="skills-grid">
@@ -469,7 +421,7 @@ export default function Home() {
                   <p>{skill.group}</p>
                   <h3>{skill.name}</h3>
                 </div>
-                <StatusBadge tone={skill.evidence === "Featured project" ? "known" : "soon"}>
+                <StatusBadge tone={skill.evidence === "Developing" ? "soon" : "known"}>
                   {skill.evidence}
                 </StatusBadge>
               </article>
@@ -479,7 +431,7 @@ export default function Home() {
 
         <section className="education section-wrap content-section" id="education">
           <SectionHeading
-            eyebrow="03 / Education"
+            eyebrow="Education"
             title="Academic background."
             body="Current university studies and intended academic direction."
           />
@@ -521,108 +473,10 @@ export default function Home() {
           </article>
         </section>
 
-        {/* PROJECTS: EXCEL + SQL + CSV */}
-        <section className="projects section-wrap content-section" id="projects">
-          <SectionHeading
-            eyebrow="04 / Projects"
-            title="Practical data analysis projects."
-            body="Explore the featured Excel case study and download the SQL query file and CSV dataset for the product-analysis project."
-          />
-
-          <article className="featured-project">
-            <div className="featured-project-copy">
-              <div className="project-badges">
-                <StatusBadge tone="known">Featured project</StatusBadge>
-                <span>Excel analytics</span>
-              </div>
-
-              <p className="project-overline">Project 01</p>
-              <h3>{olistCaseStudy.title}</h3>
-              <p>{olistCaseStudy.subtitle}</p>
-
-              <div className="project-techniques">
-                <span>Formulas</span>
-                <span>Pivot tables</span>
-                <span>KPI summary</span>
-                <span>Charts</span>
-              </div>
-
-              <a className="button button-primary" href={`/projects/${olistCaseStudy.slug}`}>
-                Read the Case Study <span aria-hidden="true">→</span>
-              </a>
-            </div>
-
-            <div className="project-kpi-grid" aria-label="Olist project metrics">
-              {olistCaseStudy.metrics.slice(0, 4).map((metric) => (
-                <div key={metric.label}>
-                  <span>{metric.label}</span>
-                  <strong>{metric.value}</strong>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article className="featured-project">
-            <div className="featured-project-copy">
-              <div className="project-badges">
-                <StatusBadge tone="known">Downloadable files</StatusBadge>
-                <span>SQL · CSV</span>
-              </div>
-
-              <p className="project-overline">Project 02</p>
-              <h3>Product Analysis Using SQL</h3>
-              <p>
-                A beginner SQL project exploring product IDs, product names,
-                list prices, sizes, and regional sales data. Download the
-                SQL query file and CSV dataset to inspect the analysis.
-              </p>
-
-              <div className="project-techniques">
-                <span>SELECT</span>
-                <span>WHERE</span>
-                <span>ORDER BY</span>
-                <span>Aggregate functions</span>
-              </div>
-
-              <div className="hero-actions">
-                <a className="button button-primary" href={SQL_FILE} download>
-                  Download SQL <span aria-hidden="true">↓</span>
-                </a>
-                <a className="button button-secondary" href={CSV_FILE} download>
-                  Download CSV <span aria-hidden="true">↓</span>
-                </a>
-              </div>
-
-              <p>
-                These links work when both files are stored in the project's
-                <code> public </code> folder with the matching filenames.
-              </p>
-            </div>
-
-            <div className="project-kpi-grid">
-              <div>
-                <span>Analysis tool</span>
-                <strong>SQL</strong>
-              </div>
-              <div>
-                <span>Data format</span>
-                <strong>CSV</strong>
-              </div>
-              <div>
-                <span>Focus</span>
-                <strong>Products</strong>
-              </div>
-              <div>
-                <span>Goal</span>
-                <strong>Data analysis</strong>
-              </div>
-            </div>
-          </article>
-        </section>
 
         <section className="credentials section-wrap content-section" id="certificates">
           <SectionHeading
-            eyebrow="05 / Certificates"
+            eyebrow="Certificates"
             title="Learning credentials."
             body="View, verify, or download the available certificate documents."
           />
@@ -681,13 +535,21 @@ export default function Home() {
               <a className="button button-quiet" href={ASPIRE_CERTIFICATE_PATH} download>Download PDF</a>
             </div>
           </article>
+          <details className="course-documents">
+            <summary>Additional course certificates</summary>
+            <ul>
+              <li><a href="/certificate-data-foundations-with-ai.pdf">Data Foundations with AI</a> · August 17, 2026</li>
+              <li><a href="/certificate-ai-powered-analytics.pdf">AI-Powered Analytics</a> · August 25, 2026</li>
+              <li><a href="/certificate-from-insights-to-influence.pdf">From Insights to Influence</a> · August 31, 2026</li>
+            </ul>
+          </details>
         </section>
 
         <section className="ai-section section-wrap content-section" id="ask-suhel-ai">
           <SectionHeading
-            eyebrow="06 / Ask Suhel AI"
-            title="A recruiter assistant grounded in portfolio information."
-            body="This local interface uses pre-written answers. No external AI service or paid API is connected."
+            eyebrow="Ask Suhel AI"
+            title="Ask about my work"
+            body="Ask a question, then follow up about a method, result or credential. Answers link back to the evidence."
           />
 
           <div className="ai-grid">
@@ -702,7 +564,7 @@ export default function Home() {
 
               <div className="question-list">
                 {suggestedQuestions.map((question) => (
-                  <button key={question} type="button" onClick={() => askQuestion(question)}>
+                  <button key={question} disabled={busy} type="button" onClick={() => askQuestion(question)}>
                     <span>{question}</span>
                     <b aria-hidden="true">→</b>
                   </button>
@@ -710,8 +572,8 @@ export default function Home() {
               </div>
 
               <div className="local-note">
-                <span>LOCAL VERIFIED MODE</span>
-                <p>Answers are limited to information presented on this website.</p>
+                <span>Private conversation</span>
+                <p>Questions stay in your browser. An available on-device language model can summarize retrieved portfolio evidence.</p>
               </div>
             </div>
 
@@ -721,10 +583,10 @@ export default function Home() {
                   <span className="chat-avatar">SA</span>
                   <p>
                     <strong>Ask Suhel AI</strong>
-                    <small><i /> Verified-data mode</small>
+                    <small><i /> Portfolio evidence</small>
                   </p>
                 </div>
-                <span className="offline-label">No API connected</span>
+                <span className="offline-label">On device</span>
               </div>
 
               <div className="chat-log" ref={chatLogRef} aria-live="polite">
@@ -736,24 +598,26 @@ export default function Home() {
                     {message.role === "assistant" && (
                       <span className="message-avatar">AI</span>
                     )}
-                    <p>{message.text}</p>
+                    <div><p>{message.text}</p>{message.source && <a className="source-link" href={message.source.href}>{message.source.title} ↗</a>}</div>
                   </div>
                 ))}
               </div>
 
+              {busy && <small role="status">Reading portfolio evidence…</small>}
               <form className="chat-form" onSubmit={submitQuestion}>
                 <label className="sr-only" htmlFor="recruiter-question">
                   Ask a recruiter question
                 </label>
                 <input
                   id="recruiter-question"
+                  maxLength={600}
                   value={chatInput}
                   onChange={(event) => setChatInput(event.target.value)}
                   onKeyDown={submitOnEnter}
                   placeholder="Ask about education, skills, projects..."
                   autoComplete="off"
                 />
-                <button type="submit" aria-label="Send question">↑</button>
+                <button disabled={busy} type="submit" aria-label="Send question">↑</button>
               </form>
 
               <p className="chat-disclaimer">
@@ -766,7 +630,7 @@ export default function Home() {
         <section className="contact section-wrap content-section" id="contact">
           <div className="contact-panel">
             <div className="contact-copy">
-              <p className="eyebrow">07 / Contact</p>
+              <p className="eyebrow">Contact</p>
               <h2>Start a professional conversation.</h2>
               <p>Use the public email or LinkedIn profile for professional enquiries.</p>
               <StatusBadge tone="known">Public contact</StatusBadge>

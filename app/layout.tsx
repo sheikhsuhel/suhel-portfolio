@@ -1,13 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { Activity } from "./activity";
 
 const productionUrl = "https://suhel-portfolio-blue.vercel.app";
 const openGraphImageUrl = `${productionUrl}/og.png`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(productionUrl),
-  title: "Sheikh Suhel Ahmed | Aspiring Data Analyst",
-  description: "The verification-first portfolio of Sheikh Suhel Ahmed, a BBA student at North South University and aspiring Data Analyst and Business Analyst.",
+  title: "Sheikh Suhel Ahmed | Data & Business Portfolio",
+  description: "Explore Sheikh Suhel Ahmed’s Excel analysis of 99,441 Olist orders, SQL product queries, business education and analytics credentials.",
   alternates: {
     canonical: productionUrl,
   },
@@ -41,7 +42,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
-      <body>{children}</body>
+      <body>{children}<Activity /></body>
     </html>
   );
 }
