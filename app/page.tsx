@@ -211,16 +211,16 @@ export default function Home() {
 
           <div className="hero-copy">
             <div className="hero-kicker">
-              <span /> Data &amp; Business Portfolio
+              <span /> Data &amp; Business Analytics
             </div>
 
             <h1>
               Sheikh Suhel Ahmed
-              <span>Data &amp; business analysis</span>
+              <span>Data consulting &amp; business analytics</span>
             </h1>
 
             <p className="hero-lead">
-              I study business at North South University and use Excel and SQL to investigate delivery reliability, product sales and the decisions behind them.
+              I use Excel to investigate late deliveries and SQL to trace product sales across territories. I’m a BBA student at North South University seeking a Data Analyst internship.
             </p>
 
             <div className="hero-actions">
@@ -256,7 +256,7 @@ export default function Home() {
 
             <div className="headshot-frame">
               <Image
-                src="/sheikh-suhel-ahmed-headshot.jpg"
+                src="/sheikh-suhel-ahmed-headshot.webp"
                 alt="Sheikh Suhel Ahmed"
                 fill
                 sizes="(max-width: 860px) 82vw, 420px"
@@ -602,7 +602,7 @@ export default function Home() {
                 <button className="chat-action" disabled={busy || !messages.length} onClick={clearChat}>Clear conversation</button>
               </div>
 
-              <div className="chat-log" ref={chatLogRef} aria-live="polite">
+              <div className="chat-log" ref={chatLogRef} role="log" aria-label="Ask Suhel conversation" aria-live="polite">
                 {messages.map((message, index) => (
                   <div
                     className={`chat-message message-${message.role}`}
@@ -659,8 +659,8 @@ export default function Home() {
           <div className="contact-panel">
             <div className="contact-copy">
               <p className="eyebrow">Contact</p>
-              <h2>Start a professional conversation.</h2>
-              <p>Use the public email or LinkedIn profile for professional enquiries.</p>
+              <h2>Contact me about Data Analyst internships</h2>
+              <p>For internship opportunities or questions about my analysis, reach me by email or LinkedIn.</p>
               <StatusBadge tone="known">Public contact</StatusBadge>
             </div>
 
@@ -672,6 +672,10 @@ export default function Home() {
               <a href={LINKEDIN_URL} target="_blank" rel="noreferrer">
                 <span>LinkedIn</span>
                 <strong>View profile ↗</strong>
+              </a>
+              <a href="https://github.com/sheikhsuhel/suhel-portfolio">
+                <span>GitHub</span>
+                <strong>Portfolio source code</strong>
               </a>
             </div>
           </div>

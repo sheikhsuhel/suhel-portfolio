@@ -5,10 +5,13 @@ import { Activity } from "./activity";
 const productionUrl = "https://suhel-portfolio-blue.vercel.app";
 const openGraphImageUrl = `${productionUrl}/og.png`;
 
+const title = "Sheikh Suhel Ahmed | Data & Business Analytics";
+const description = "Explore Sheikh Suhel Ahmed’s Excel study of 99,441 Olist orders and SQL analysis of product sales across 10 territories. Seeking a Data Analyst internship.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(productionUrl),
-  title: "Sheikh Suhel Ahmed | Data & Business Portfolio",
-  description: "Explore Sheikh Suhel Ahmed’s Excel analysis of 99,441 Olist orders, SQL product queries, business education and analytics credentials.",
+  title,
+  description,
   alternates: {
     canonical: productionUrl,
   },
@@ -16,16 +19,16 @@ export const metadata: Metadata = {
     icon: "/favicon.svg",
   },
   openGraph: {
-    title: "Sheikh Suhel Ahmed",
-    description: "Aspiring Data Analyst & BBA Student",
+    title,
+    description,
     type: "website",
     url: productionUrl,
     images: [{ url: openGraphImageUrl, width: 1731, height: 909, alt: "Sheikh Suhel Ahmed portfolio" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sheikh Suhel Ahmed",
-    description: "Aspiring Data Analyst & BBA Student",
+    title,
+    description,
     images: [openGraphImageUrl],
   },
 };

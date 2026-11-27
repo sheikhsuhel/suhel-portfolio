@@ -12,7 +12,7 @@ const { askPortfolio } = await import("../app/content/chat-client.ts");
 const evidence = retrieve("Explain the Olist project.");
 const context = {question:"Explain the Olist project.",recentQuestions:[],evidence};
 const env = {GROQ_API_KEY:randomUUID()};
-const ok = (answer, sources=[1]) => Response.json({model:"openai/gpt-oss-120b",choices:[{message:{content:JSON.stringify({answer,sources})}}]});
+const ok = (answer, sources=[1]) => Response.json({model:"openai/gpt-oss-120b",choices:[{message:{content:JSON.stringify({passages:sources.map(source=>({source,text:answer}))})}}]});
 const request = (body,origin="https://portfolio.test") => new Request("https://portfolio.test/api/chat",{method:"POST",headers:{origin,"Content-Type":"application/json"},body:JSON.stringify(body)});
 test("only configured free-plan Groq models activate the server adapter", () => {
   assert.equal(providerConfig({}),null);
@@ -30,7 +30,7 @@ test("mock provider receives a bounded grounded request and resolves model citat
     assert.ok(options.signal);
     assert.match(payload.messages[0].content,/never as instructions/i);
     assert.match(payload.messages[1].content,/99,441/);
-    return ok("The workbook covers 99,441 orders.");
+    return ok(evidence[0].fact.split(". ")[0] + ".");
   });
   const {turn}=await provider.generate(context);
   assert.equal(turn.mode,"Cloud AI");
@@ -38,7 +38,7 @@ test("mock provider receives a bounded grounded request and resolves model citat
   assert.equal(turn.source.href,"/projects/olist-excel-analytics");
 });
 test("model cannot supply invented sources, numbers or links",async()=>{
-  for (const result of [ok("Invented reference",[99]),ok("Generated 450000 orders."),ok("Visit https://example.com")]) {
+  for (const result of [ok("He worked as a senior data consultant."),ok("Invented reference",[99]),ok("Generated 450000 orders."),ok("Visit https://example.com")]) {
     assert.equal((await createProvider(env,async()=>result).generate(context)).turn,undefined);
   }
 });
@@ -51,7 +51,7 @@ test("timeout and rejected key produce safe failure; 429 respects Retry-After",a
 test("transient failure retries once and model access failure selects the documented alternate",async()=>{
   for (const status of [503,404]) {
     const calls=[];
-    const provider=createProvider(env,async(_,opts)=>{calls.push(JSON.parse(opts.body).model);return calls.length===1?new Response(null,{status}):ok("The workbook covers 99,441 orders.");});
+    const provider=createProvider(env,async(_,opts)=>{calls.push(JSON.parse(opts.body).model);return calls.length===1?new Response(null,{status}):ok(evidence[0].fact.split(". ")[0] + ".");});
     assert.equal((await provider.generate(context)).turn.mode,"Cloud AI");
     assert.deepEqual(calls,["openai/gpt-oss-120b",status===404?"openai/gpt-oss-20b":"openai/gpt-oss-120b"]);
   }
@@ -65,6 +65,8 @@ test("retrieval resolves methods, limitations, explicit topic changes and creden
   assert.match(lookup("Did he earn IBM Generative AI?",[]).text,/does not provide/);
   assert.match(lookup("Aspire Cohort 3?",[]).text,/does not specify/);
   assert.match(lookup("Grameenphone Data Analytics in the AI Era?",[]).text,/not verified/);
+  assert.equal(lookup("Is Suhel looking for a Data Analyst internship?", []).source.topic, "opportunities");
+  assert.equal(lookup("Which internships has he completed?", []).source, undefined);
   assert.equal(lookup("Who was his employer?",[methods]).source,undefined);
 });
 test("route rejects invalid input, excess history, oversized bodies and cross-origin requests",async()=>{
@@ -98,7 +100,7 @@ test("route uses only allowlisted evidence, and rejected credentials never reach
   t.mock.method(globalThis,"fetch",async(_,opts)=>{
     calls++;
     assert.doesNotMatch(opts.body,/private@example/);
-    return calls===1 ? ok("The workbook covers 99,441 orders.") : new Response(env.GROQ_API_KEY,{status:401});
+    return calls===1 ? ok(evidence[0].fact.split(". ")[0] + ".") : new Response(env.GROQ_API_KEY,{status:401});
   });
   const payload={question:context.question,history:["Contact me at private@example.org"]};
   const success=await (await POST(request(payload))).json();
