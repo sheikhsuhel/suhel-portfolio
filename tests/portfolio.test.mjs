@@ -26,12 +26,14 @@ test("on-device generation receives retrieved evidence and releases its session"
   let closed = false;
   t.mock.method(globalThis, "fetch", () => { throw Error("Unexpected network access"); });
   globalThis.LanguageModel = {availability: async () => "available", create: async () => ({
-    prompt: async input => {assert.match(input, /North South University/); return "Suhel studies business.";},
+    prompt: async input => {assert.match(input, /North South University/); return JSON.stringify({passages:[{source:1,text:"Suhel studies Business Administration at North South University."}]});},
     destroy: () => {closed = true;},
   })};
   t.after(() => {delete globalThis.LanguageModel;});
-  assert.equal((await answer("What degree is he studying?", [], true)).text, "Suhel studies business.");
+  assert.equal((await answer("What degree is he studying?", [], true)).text, "Suhel studies Business Administration at North South University.");
   assert.equal(closed, true);
+  globalThis.LanguageModel.create = async () => ({prompt: async () => JSON.stringify({passages:[{source:1,text:"He leads a consulting firm."}]}), destroy() {}});
+  assert.equal((await answer("What degree is he studying?", [], true)).mode, "Portfolio sources");
 });
 
 test("dashboard fails closed and reads seven days only after authentication", async t => {
@@ -66,4 +68,8 @@ test("dashboard fails closed and reads seven days only after authentication", as
   assert.equal((await activity("x".repeat(40),"https://portfolio.example")).status,413);
   assert.equal((await activity("question","https://portfolio.example")).status,204);
   assert.equal(transport.mock.callCount(),2);
+  transport.mock.mockImplementation(async () => Response.json(Array.from({length:7}, () => ({result:Object.keys(events).map(() => "")}))));
+  assert.equal((await GET(new Request(url, {headers:auth}))).status,503);
+  transport.mock.mockImplementation(async () => Response.json([{}, {}]));
+  assert.equal((await activity("question","https://portfolio.example")).status,503);
 });

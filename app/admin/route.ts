@@ -28,6 +28,7 @@ export async function GET(request: Request) {
     const rows = result.map(item => {
       if (!Array.isArray(item) || item.length !== labels.length) throw new Error("Invalid daily counts");
       return item.map(value => {
+        if (value !== null && typeof value !== "number" && (typeof value !== "string" || !/^\d+$/.test(value))) throw new Error("Invalid count");
         const n = Number(value);
         if (!Number.isSafeInteger(n) || n < 0) throw new Error("Invalid count");
         return n;

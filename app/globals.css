@@ -2945,7 +2945,7 @@ input:focus-visible {
 .chat-form { align-items: end; }
 .chat-action { color: var(--blue-pale); background: transparent; border: 1px solid var(--border); border-radius: .5rem; padding: .4rem .65rem; cursor: pointer; font: inherit; font-size: .8rem; }
 .answer-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
-.answer-body { min-width: 0; } .answer-body p { white-space: pre-wrap; }
+.answer-body { min-width: 0; overflow-wrap: anywhere; } .answer-body p { white-space: pre-wrap; }
 .answer-body small, .answer-body .source-link { display: block; }
 .response-mode, .chat-feedback { color: var(--text-soft); font-size: .75rem; }
 .chat-feedback:not(:empty) { padding: .5rem 1rem; }

@@ -1,4 +1,4 @@
-import { instruction, lookup, retrieve, type Turn } from "./knowledge";
+import { instruction, passageFormat, passageTurn, lookup, retrieve, type Turn } from "./knowledge";
 export type { Turn } from "./knowledge";
 type Session = { prompt(input: string, options: {signal: AbortSignal}): Promise<string>; destroy(): void };
 type LocalModel = { availability(options: object): Promise<string>; create(options: object): Promise<Session> };
@@ -28,10 +28,13 @@ export async function answer(question: string, history: Turn[], onDevice = false
     const model = localModel();
     if (model && await model.availability(modelOptions) === "available") {
       const signal = AbortSignal.timeout(8000);
-      session = await model.create({...modelOptions, signal, initialPrompts:[{role:"system",content:instruction}]});
+      session = await model.create({...modelOptions, signal, initialPrompts:[{role:"system",content:instruction + " " + passageFormat}]});
       const evidence = retrieve(question, [...history].reverse().find(t => t.source)?.source);
-      const text = (await session.prompt(JSON.stringify({question, evidence:evidence.map(s=>s.fact), recentQuestions:history.filter(t=>t.role==="user").slice(-3).map(t=>t.text)}), {signal})).trim();
-      if (text && text.length <= 2400) return {...base, text, mode:"On-device AI", references:evidence};
+      const text = (await session.prompt(JSON.stringify({question, evidence:evidence.map((s,i)=>({id:i+1,fact:s.fact})), recentQuestions:history.filter(t=>t.role==="user").slice(-3).map(t=>t.text)}), {signal})).trim();
+      if (text.length <= 4000) {
+        const turn = passageTurn(text, evidence, "On-device AI");
+        if (turn) return turn;
+      }
     }
   } catch { /* Return the immediately available evidence if local generation fails. */ }
   finally { session?.destroy(); }
